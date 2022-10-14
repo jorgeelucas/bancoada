@@ -1,13 +1,16 @@
 package br.com.ada.controller;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.ada.dto.CadastroDTO;
 import br.com.ada.dto.GetUsuarioDTO;
 import br.com.ada.entidade.Usuario;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -17,9 +20,8 @@ import java.util.List;
 @RequestMapping("/usuarios")
 public class UsuarioController {
     /**
-     * CRIAR PROJETO WEB SIMPLES COM SPRING PARA USUARIOS
-     * IMPORTAR PROJETO NA IDE
-     * CRIAR A ROTA DE CADASTRAR E BUSCAR POR ID
+     * CRIAR METODO ALTERAR USUARIO
+     * CRIAR METODO DELETAR USUARIO POR ID
      *
      * O PROJETO TEM QUE RODAR NA PORTA 8081
      */
@@ -43,6 +45,7 @@ public class UsuarioController {
 
     // cadastrar novo usuário
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Integer cadastrarNovo(@RequestBody CadastroDTO dto) {
         // adicionar mais um no id
         Integer novoId = null;
@@ -55,9 +58,8 @@ public class UsuarioController {
             novoId = 1;
         }
 
-        String senhaCriptografada = new StringBuilder(dto.getSenha())
-                .reverse()
-                .toString();
+        String senhaCriptografada = BCrypt.withDefaults()
+                .hashToString(12, dto.getSenha().toCharArray());
 
         Usuario novoUsuario = new Usuario(novoId,
                 dto.getNome(),
@@ -78,8 +80,33 @@ public class UsuarioController {
                 .toList();
     }
 
-    // alterar usuário
+    @GetMapping("/verify/{id}")
+    public Usuario getUsuarioPelaSenha(@PathVariable int id, @RequestBody String senha) {
 
-    // deletar usuário
+        Usuario usuarioEncontrado = usuarios.stream()
+                .filter(usuario -> usuario.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+
+        BCrypt.Result verify = BCrypt.verifyer().verify(senha.toCharArray(), usuarioEncontrado.getSenha());
+        if (verify.verified) {
+            return usuarioEncontrado;
+        } else {
+            return null;
+        }
+    }
+
+    // alterar usuário
+    // - podem usar o dto de cadastro
+    // - localhost:8081/usuario/1
+    // - PATH
+    // - {email: novo-email@jorge.com}
+    // - status response: 200 OK
+
+    // deletar usuário por id
+    // - DELETE
+    // - localhost:8081/usuarios/1
+    // - status response: 204 (no content)
 
 }
