@@ -2,6 +2,8 @@ package br.com.ada.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDate;
+
 public class CadastroDTO {
     // DATA TRANSFER OBJECT
 
