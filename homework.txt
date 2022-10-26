@@ -1,6 +1,10 @@
 - ALTERAR BANCO DE DADOS PARA POSTGRES COM DOCKER
+    * imagem oficial: https://hub.docker.com/_/postgres/
+    * run the image: docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
 
 - CRIAR ENTIDADE ENDERECO E RELACIONAR COM USUARIO
     * logradouro, bairro, cidade, estado e pais
     * o endereço deve ser obrigatório
+
+- OneToOne: https://www.baeldung.com/jpa-one-to-one
 
