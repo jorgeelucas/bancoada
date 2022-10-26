@@ -13,13 +13,15 @@ public class CadastroDTO {
     private String email;
     private String senha;
     private String cpf;
+    private ContaCorrenteDTO contaCorrente;
 
-    public CadastroDTO(String nome, int idade, String email, String senha, String cpf) {
+    public CadastroDTO(String nome, int idade, String email, String senha, String cpf, ContaCorrenteDTO contaCorrente) {
         this.nome = nome;
         this.idade = idade;
         this.email = email;
         this.senha = senha;
         this.cpf = cpf;
+        this.contaCorrente = contaCorrente;
     }
 
     public String getNome() {
@@ -40,5 +42,9 @@ public class CadastroDTO {
 
     public String getCpf() {
         return cpf;
+    }
+
+    public ContaCorrenteDTO getContaCorrente() {
+        return contaCorrente;
     }
 }
